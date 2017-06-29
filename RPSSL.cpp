@@ -62,10 +62,12 @@ int Player::playTurn() {
 class Game {
     private:
     unordered_map<int,int> winners;
+    unordered_map<int,int> losers;
     int totalgames;
     int ties;
     bool findWinner(int, int);
     void insertWinner(int);
+    void insertLoser(int);
 
     public:
     Game();
@@ -93,6 +95,16 @@ void Game::insertWinner(int option) {
     return;
 };
 
+void Game::insertLoser(int option) {
+    if (losers.count(option) == 1) {
+        losers[option] += 1;
+    }
+    else {
+        losers.insert(make_pair(option,1));
+    }
+    return;
+};
+
 void Game::playGame(int a, int b) {
     totalgames++;
 
@@ -104,9 +116,11 @@ void Game::playGame(int a, int b) {
     bool flag = findWinner(a, b);
     if (flag) {
         insertWinner(a);
+        insertLoser(b);
     }
     else {
         insertWinner(b);
+        insertLoser(a);
     }
     return;
 };
@@ -146,19 +160,19 @@ void Game::printStats() {
     for (auto it = winners.begin(); it != winners.end(); ++it) {
         switch (it->first) {
             case ROCK:
-                cout << "ROCK: " << it->second << endl;
+                cout << "ROCK: " << "Wins: " << it->second << " Losses: " << losers[it->first] << endl;
                 break;
             case PAPER:
-                cout << "PAPER: " << it->second << endl;
+                cout << "PAPER: " << "Wins: " << it->second << " Losses: " << losers[it->first] << endl;
                 break;
             case SCISSORS:
-                cout << "SCISSORS: " << it->second << endl;
+                cout << "SCISSORS: " << "Wins: " << it->second << " Losses: " << losers[it->first] << endl;
                 break;
             case SPOCK:
-                cout << "SPOCK: " << it->second << endl;
+                cout << "SPOCK: " << "Wins: " << it->second << " Losses: " << losers[it->first] << endl;
                 break;
             case LIZARD:
-                cout << "LIZARD: " << it->second << endl;
+                cout << "LIZARD: " << "Wins: " << it->second << " Losses: " << losers[it->first] << endl;
                 break;
         }
     }
